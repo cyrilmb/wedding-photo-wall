@@ -3,82 +3,142 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cyril & Megan's Wedding · 6.6.26</title>
+<title>Cyril & Megan · 6.6.26</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --coral: #D85A30; --coral-lt: #FAECE7;
-    --green: #3B6D11; --green-lt: #EAF3DE; --green-bd: #C0DD97;
-    --text: #1a1a18; --text-muted: #5F5E5A;
-    --border: rgba(0,0,0,0.13); --gray-lt: #F1EFE8;
-    --radius: 10px; --radius-lg: 16px;
-  }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #faf9f6; color: var(--text); min-height: 100vh; }
-  .site-header { text-align: center; padding: 2rem 1rem 1.25rem; border-bottom: 0.5px solid var(--border); background: #fff; }
-  .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); margin-bottom: 6px; }
-  .site-header h1 { font-size: clamp(20px, 5vw, 30px); font-weight: 600; line-height: 1.2; }
-  .date-line { font-size: 14px; color: var(--text-muted); margin-top: 6px; }
-  .nav { display: flex; justify-content: center; gap: 8px; padding: 0.75rem 1rem; background: #fff; border-bottom: 0.5px solid var(--border); position: sticky; top: 0; z-index: 10; }
-  .nav-btn { padding: 8px 20px; border-radius: 99px; border: 0.5px solid var(--border); background: transparent; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: all 0.15s; }
-  .nav-btn.active { background: var(--coral); color: #fff; border-color: var(--coral); font-weight: 500; }
-  .view { display: none; max-width: 560px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-  .view.active { display: block; }
-  .upload-hero { text-align: center; margin-bottom: 1.5rem; font-size: 15px; color: var(--text-muted); }
-  .field-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-  .text-input { width: 100%; padding: 11px 14px; border-radius: var(--radius); border: 0.5px solid var(--border); font-size: 15px; background: #fff; color: var(--text); outline: none; margin-bottom: 1rem; }
-  .text-input:focus { border-color: var(--coral); }
-  .drop-zone { border: 1.5px dashed #ccc; border-radius: var(--radius-lg); padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: #fff; margin-bottom: 1rem; }
-  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--coral); background: var(--coral-lt); }
-  .drop-icon { font-size: 40px; display: block; margin-bottom: 8px; }
-  .drop-zone p { font-size: 15px; color: var(--text-muted); }
-  .drop-zone small { font-size: 12px; color: #aaa; display: block; margin-top: 4px; }
-  .quota-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-  .quota-track { height: 6px; background: #e8e6e0; border-radius: 99px; margin-bottom: 1rem; }
-  .quota-fill { height: 100%; border-radius: 99px; background: var(--coral); transition: width 0.3s; }
-  .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; margin-bottom: 1rem; }
-  .preview-item { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; }
-  .preview-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .remove-btn { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; border: none; background: rgba(0,0,0,0.55); color: #fff; cursor: pointer; font-size: 13px; line-height: 22px; text-align: center; padding: 0; }
-  .submit-btn { width: 100%; padding: 14px; border-radius: var(--radius); border: none; background: var(--coral); color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
-  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .submit-btn:hover:not(:disabled) { opacity: 0.88; }
-  .success-msg { display: none; background: var(--green-lt); border: 0.5px solid var(--green-bd); border-radius: var(--radius); padding: 14px 16px; color: var(--green); font-size: 14px; text-align: center; margin-bottom: 1rem; }
-  .success-msg.show { display: block; }
-  .ss-controls { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
-  .ctrl-btn { padding: 8px 14px; border-radius: var(--radius); border: 0.5px solid var(--border); background: #fff; cursor: pointer; font-size: 14px; color: var(--text); transition: background 0.15s; }
-  .ctrl-btn:hover { background: var(--gray-lt); }
-  .ss-count { margin-left: auto; font-size: 13px; color: var(--text-muted); }
-  .ss-stage { width: 100%; aspect-ratio: 16/9; background: #111; border-radius: var(--radius-lg); overflow: hidden; position: relative; margin-bottom: 10px; }
-  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.7s ease; }
-  .slide.active { opacity: 1; }
-  .slide img { width: 100%; height: 100%; object-fit: contain; }
-  .slide-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.6)); color: #fff; padding: 20px 14px 10px; font-size: 13px; }
-  .ss-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; gap: 10px; }
-  .ss-empty span { font-size: 48px; }
-  .ss-empty p { font-size: 14px; }
-  .thumb-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 0.75rem; }
-  .thumb { flex-shrink: 0; width: 58px; height: 58px; border-radius: var(--radius); overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s; }
-  .thumb.active { border-color: var(--coral); }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .refresh-note { font-size: 12px; color: var(--text-muted); text-align: center; margin-bottom: 0.75rem; }
-  .dl-btn { width: 100%; padding: 11px; border-radius: var(--radius); border: 0.5px solid var(--border); background: #fff; font-size: 14px; color: var(--text); cursor: pointer; transition: background 0.15s; }
-  .dl-btn:hover { background: var(--gray-lt); }
-  .qr-view { text-align: center; }
-  .qr-card { background: #fff; border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem 1.5rem; display: inline-block; margin: 0 auto 1.5rem; max-width: 300px; width: 100%; }
-  .qr-eyebrow { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
-  .qr-title { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-  .qr-date { font-size: 13px; color: var(--text-muted); margin-bottom: 1.25rem; }
-  #qr-code { display: flex; justify-content: center; margin-bottom: 1.25rem; }
-  #qr-code canvas, #qr-code img { border-radius: 8px; }
-  .qr-instruction { font-size: 14px; color: var(--text-muted); }
-  .qr-url { font-size: 11px; color: var(--coral); word-break: break-all; margin-top: 6px; font-family: monospace; }
-  .qr-help { font-size: 13px; color: var(--text-muted); max-width: 420px; margin: 0 auto; line-height: 1.7; background: var(--gray-lt); border-radius: var(--radius); padding: 1rem 1.25rem; text-align: left; }
-  .qr-help strong { color: var(--text); }
-  .qr-help input { width: 100%; padding: 9px 12px; border-radius: 8px; border: 0.5px solid #ccc; font-size: 13px; margin: 8px 0; }
-  .qr-help button { width: 100%; padding: 9px; border-radius: 8px; border: 0.5px solid #ccc; background: #fff; cursor: pointer; font-size: 13px; }
-  .qr-help button:hover { background: #eee; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --coral: #D85A30; --coral-lt: #FAECE7; --coral-dk: #993C1D;
+  --green: #3B6D11; --green-lt: #EAF3DE; --green-bd: #C0DD97;
+  --red-lt: #FCEBEB; --red-bd: #F7C1C1; --red: #A32D2D;
+  --text: #1a1a18; --text-muted: #5F5E5A; --text-hint: #9a9890;
+  --bg: #faf9f6; --surface: #fff;
+  --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.2);
+  --gray-lt: #F1EFE8;
+  --radius: 10px; --radius-lg: 16px;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── HEADER ── */
+.site-header { text-align: center; padding: 2rem 1rem 1.25rem; border-bottom: 0.5px solid var(--border); background: var(--surface); }
+.eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--coral); margin-bottom: 6px; }
+.site-header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 600; }
+.date-line { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
+
+/* ── NAV (admin only) ── */
+.nav { display: flex; justify-content: center; gap: 8px; padding: 0.75rem 1rem; background: var(--surface); border-bottom: 0.5px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.nav-btn { padding: 7px 18px; border-radius: 99px; border: 0.5px solid var(--border); background: transparent; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; }
+.nav-btn.active { background: var(--coral); color: #fff; border-color: var(--coral); font-weight: 500; }
+.nav-badge { display: inline-block; background: var(--coral-lt); color: var(--coral-dk); font-size: 11px; font-weight: 600; border-radius: 99px; padding: 1px 7px; margin-left: 5px; }
+.nav-btn.active .nav-badge { background: rgba(255,255,255,0.25); color: #fff; }
+
+/* ── VIEWS ── */
+.view { display: none; max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+.view.active { display: block; }
+
+/* ── SHARED FORM BITS ── */
+.field-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+.text-input { width: 100%; padding: 11px 14px; border-radius: var(--radius); border: 0.5px solid var(--border); font-size: 15px; background: var(--surface); color: var(--text); outline: none; margin-bottom: 1rem; transition: border-color 0.15s; }
+.text-input:focus { border-color: var(--coral); }
+
+/* ── SLOT GRID ── */
+.slot-intro { font-size: 15px; color: var(--text-muted); text-align: center; margin-bottom: 1.25rem; }
+.slots-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 1rem; }
+.slot {
+  aspect-ratio: 1; border-radius: var(--radius); border: 1.5px dashed var(--border-md);
+  background: var(--gray-lt); cursor: pointer; position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden; transition: border-color 0.15s, background 0.15s;
+  font-size: 11px; color: var(--text-hint); gap: 4px;
+}
+.slot:hover { border-color: var(--coral); background: var(--coral-lt); }
+.slot.filled { border-style: solid; border-color: transparent; cursor: default; }
+.slot.filled:hover { border-color: transparent; background: transparent; }
+.slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slot .slot-num { font-size: 16px; font-weight: 600; color: var(--text-hint); }
+.slot-remove {
+  position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+  border-radius: 50%; border: none; background: rgba(0,0,0,0.5);
+  color: #fff; cursor: pointer; font-size: 12px; line-height: 20px;
+  text-align: center; padding: 0; display: none;
+}
+.slot.filled:hover .slot-remove { display: block; }
+
+.quota-bar-wrap { margin-bottom: 1.25rem; }
+.quota-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
+.quota-track { height: 5px; background: #e8e6e0; border-radius: 99px; }
+.quota-fill { height: 100%; border-radius: 99px; background: var(--coral); transition: width 0.3s; }
+
+.submit-btn { width: 100%; padding: 14px; border-radius: var(--radius); border: none; background: var(--coral); color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+.submit-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.submit-btn:hover:not(:disabled) { opacity: 0.87; }
+
+.toast { display: none; border-radius: var(--radius); padding: 13px 16px; font-size: 14px; text-align: center; margin-bottom: 1rem; }
+.toast.success { background: var(--green-lt); border: 0.5px solid var(--green-bd); color: var(--green); }
+.toast.error { background: var(--red-lt); border: 0.5px solid var(--red-bd); color: var(--red); }
+.toast.show { display: block; }
+
+/* ── ADMIN: SLIDESHOW ── */
+.ss-toolbar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
+.ctrl-btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid var(--border); background: var(--surface); cursor: pointer; font-size: 14px; color: var(--text); transition: background 0.15s; white-space: nowrap; }
+.ctrl-btn:hover { background: var(--gray-lt); }
+.ctrl-btn.danger { color: var(--red); }
+.ctrl-btn.danger:hover { background: var(--red-lt); }
+.ss-count { margin-left: auto; font-size: 13px; color: var(--text-muted); }
+
+.ss-stage { width: 100%; aspect-ratio: 16/9; background: #111; border-radius: var(--radius-lg); overflow: hidden; position: relative; margin-bottom: 10px; }
+.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.7s ease; }
+.slide.active { opacity: 1; }
+.slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.slide-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.62)); color: #fff; padding: 22px 14px 10px; font-size: 13px; }
+.ss-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; gap: 10px; }
+.ss-empty-icon { font-size: 48px; }
+.ss-empty p { font-size: 14px; }
+
+.thumb-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 1rem; }
+.thumb-strip::-webkit-scrollbar { height: 4px; }
+.thumb-strip::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+.thumb { flex-shrink: 0; width: 56px; height: 56px; border-radius: var(--radius); overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s; position: relative; }
+.thumb.active { border-color: var(--coral); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb-del { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.thumb:hover .thumb-del { background: rgba(163,45,45,0.65); }
+.thumb-del span { color: #fff; font-size: 18px; opacity: 0; transition: opacity 0.15s; cursor: pointer; }
+.thumb:hover .thumb-del span { opacity: 1; }
+
+.interval-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 0.75rem; }
+.interval-row input[type=range] { flex: 1; }
+.interval-val { min-width: 32px; font-weight: 500; color: var(--text); }
+
+.dl-btn { width: 100%; padding: 11px; border-radius: var(--radius); border: 0.5px solid var(--border); background: var(--surface); font-size: 14px; color: var(--text); cursor: pointer; transition: background 0.15s; margin-top: 0.5rem; }
+.dl-btn:hover { background: var(--gray-lt); }
+
+/* ── ADMIN: MY UPLOADS ── */
+.section-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
+
+/* ── ADMIN: QR ── */
+.qr-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem 1.5rem; text-align: center; max-width: 300px; margin: 0 auto 1.5rem; }
+.qr-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+.qr-title { font-size: 20px; font-weight: 600; margin-bottom: 3px; }
+.qr-date { font-size: 13px; color: var(--text-muted); margin-bottom: 1.25rem; }
+#qr-code { display: flex; justify-content: center; margin-bottom: 1.25rem; }
+#qr-code canvas, #qr-code img { border-radius: 8px; }
+.qr-sub { font-size: 13px; color: var(--text-muted); }
+.qr-url-display { font-size: 11px; color: var(--coral); word-break: break-all; margin-top: 5px; font-family: monospace; }
+.qr-help { font-size: 13px; color: var(--text-muted); max-width: 440px; margin: 0 auto; line-height: 1.7; background: var(--gray-lt); border-radius: var(--radius); padding: 1rem 1.25rem; }
+.qr-help strong { color: var(--text); }
+.qr-help input { width: 100%; padding: 9px 12px; border-radius: 8px; border: 0.5px solid #ccc; font-size: 13px; margin: 8px 0; background: var(--surface); color: var(--text); }
+.qr-help button { width: 100%; padding: 9px; border-radius: 8px; border: 0.5px solid #ccc; background: var(--surface); cursor: pointer; font-size: 13px; }
+.qr-help button:hover { background: var(--gray-lt); }
+
+/* ── GUEST DONE STATE ── */
+.done-screen { text-align: center; padding: 3rem 1.5rem; }
+.done-screen .done-icon { font-size: 64px; margin-bottom: 1rem; }
+.done-screen h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.done-screen p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+.upload-more-btn { margin-top: 1.5rem; padding: 11px 24px; border-radius: 99px; border: 0.5px solid var(--border); background: transparent; cursor: pointer; font-size: 14px; color: var(--text-muted); }
+.upload-more-btn:hover { background: var(--gray-lt); }
 </style>
 </head>
 <body>
@@ -89,159 +149,453 @@
   <div class="date-line">June 6, 2026 &nbsp;·&nbsp; Share your memories with us 💐</div>
 </header>
 
-<nav class="nav">
-  <button class="nav-btn active" onclick="switchView('upload')">📷 Upload</button>
-  <button class="nav-btn" onclick="switchView('slideshow')">🎞 Slideshow</button>
+<!-- Admin nav (hidden for guests) -->
+<nav class="nav" id="admin-nav" style="display:none">
+  <button class="nav-btn active" onclick="switchView('slideshow')">🎞 Slideshow <span class="nav-badge" id="nav-count">0</span></button>
+  <button class="nav-btn" onclick="switchView('my-upload')">📷 My Upload</button>
   <button class="nav-btn" onclick="switchView('qr')">📲 QR Code</button>
 </nav>
 
-<div class="view active" id="view-upload">
-  <p class="upload-hero">Add up to 10 photos to our live wedding album 💒</p>
-  <div class="success-msg" id="success-msg">✅ Your photos have been added! Thank you for celebrating with us 🎉</div>
-  <label class="field-label" for="guest-name">Your name (optional)</label>
-  <input class="text-input" id="guest-name" type="text" placeholder="e.g. Aunt Marie" maxlength="40" />
-  <div class="drop-zone" id="drop-zone"
-    onclick="document.getElementById('file-input').click()"
-    ondragover="event.preventDefault();this.classList.add('drag-over')"
-    ondragleave="this.classList.remove('drag-over')"
-    ondrop="handleDrop(event)">
-    <span class="drop-icon">📤</span>
-    <p>Tap to choose photos</p>
-    <small>or drag &amp; drop · JPG, PNG, GIF, WEBP</small>
+<!-- ══════════════════════════════════════════
+     GUEST VIEW
+══════════════════════════════════════════ -->
+<div class="view active" id="view-guest">
+
+  <!-- Done state (shown after submit) -->
+  <div class="done-screen" id="guest-done" style="display:none">
+    <div class="done-icon">💐</div>
+    <h2>Thank you!</h2>
+    <p>Your photos have been added to the album.<br>Enjoy the celebration!</p>
+    <button class="upload-more-btn" onclick="resetGuestUpload()">Upload more photos</button>
   </div>
-  <input id="file-input" type="file" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)" />
-  <div class="quota-row">
-    <span id="quota-text">0 / 10 photos selected</span>
-    <span id="quota-pct">0%</span>
+
+  <!-- Upload form -->
+  <div id="guest-form">
+    <p class="slot-intro">Tap any empty slot to add a photo — up to 10 from you 📸</p>
+
+    <div class="toast success" id="guest-toast"></div>
+
+    <label class="field-label" for="guest-name">Your name (optional)</label>
+    <input class="text-input" id="guest-name" type="text" placeholder="e.g. Aunt Marie" maxlength="40" />
+
+    <div class="slots-grid" id="guest-slots"></div>
+
+    <div class="quota-bar-wrap">
+      <div class="quota-row">
+        <span id="guest-quota-text">0 of 10 slots filled</span>
+        <span id="guest-quota-pct">0%</span>
+      </div>
+      <div class="quota-track"><div class="quota-fill" id="guest-quota-fill" style="width:0%"></div></div>
+    </div>
+
+    <button class="submit-btn" id="guest-submit" disabled onclick="guestSubmit()">
+      Add my photos to the album ✨
+    </button>
   </div>
-  <div class="quota-track"><div class="quota-fill" id="quota-fill" style="width:0%"></div></div>
-  <div class="preview-grid" id="preview-grid"></div>
-  <button class="submit-btn" id="submit-btn" disabled onclick="submitPhotos()">Add to Album ✨</button>
+
+  <!-- Hidden file input -->
+  <input type="file" id="guest-file-input" accept="image/*" style="display:none" onchange="guestFileChosen(this)" />
 </div>
 
+<!-- ══════════════════════════════════════════
+     ADMIN: SLIDESHOW
+══════════════════════════════════════════ -->
 <div class="view" id="view-slideshow">
-  <div class="ss-controls">
+  <div class="ss-toolbar">
     <button class="ctrl-btn" id="play-btn" onclick="togglePlay()">⏸ Pause</button>
-    <button class="ctrl-btn" onclick="step(-1)">◀ Prev</button>
-    <button class="ctrl-btn" onclick="step(1)">Next ▶</button>
+    <button class="ctrl-btn" onclick="ssStep(-1)">◀</button>
+    <button class="ctrl-btn" onclick="ssStep(1)">▶</button>
     <button class="ctrl-btn" onclick="refreshSlideshow()">↻ Refresh</button>
+    <button class="ctrl-btn danger" onclick="clearAlbum()">🗑 Clear all</button>
     <span class="ss-count" id="ss-count">0 photos</span>
   </div>
+
+  <div class="interval-row">
+    <span>Slide speed:</span>
+    <input type="range" min="3" max="20" step="1" value="8" id="interval-slider" oninput="updateInterval(this.value)" />
+    <span class="interval-val" id="interval-val">8s</span>
+  </div>
+
   <div class="ss-stage" id="ss-stage">
     <div class="ss-empty" id="ss-empty">
-      <span>📸</span><p>Waiting for guests to upload…</p>
+      <div class="ss-empty-icon">📸</div>
+      <p>No photos yet — waiting for guests…</p>
     </div>
   </div>
+
   <div class="thumb-strip" id="thumb-strip"></div>
-  <p class="refresh-note">Slideshow auto-refreshes every 8 seconds to pick up new uploads.</p>
+
   <button class="dl-btn" onclick="downloadAll()">⬇ Save all photos as ZIP</button>
 </div>
 
+<!-- ══════════════════════════════════════════
+     ADMIN: MY UPLOAD
+══════════════════════════════════════════ -->
+<div class="view" id="view-my-upload">
+  <p class="section-title">Add your own photos to the album</p>
+
+  <div class="toast" id="admin-toast"></div>
+
+  <label class="field-label" for="admin-name">Label for your photos</label>
+  <input class="text-input" id="admin-name" type="text" value="Cyril & Megan" maxlength="40" />
+
+  <div class="slots-grid" id="admin-slots"></div>
+
+  <div class="quota-bar-wrap">
+    <div class="quota-row">
+      <span id="admin-quota-text">0 of 10 slots filled</span>
+      <span id="admin-quota-pct">0%</span>
+    </div>
+    <div class="quota-track"><div class="quota-fill" id="admin-quota-fill" style="width:0%"></div></div>
+  </div>
+
+  <button class="submit-btn" id="admin-submit" disabled onclick="adminSubmit()">
+    Add to slideshow ✨
+  </button>
+
+  <input type="file" id="admin-file-input" accept="image/*" style="display:none" onchange="adminFileChosen(this)" />
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN: QR CODE
+══════════════════════════════════════════ -->
 <div class="view" id="view-qr">
-  <div class="qr-view">
-    <div class="qr-card">
-      <div class="qr-eyebrow">Scan to share photos</div>
-      <div class="qr-title">Cyril &amp; Megan</div>
-      <div class="qr-date">June 6, 2026</div>
-      <div id="qr-code"></div>
-      <div class="qr-instruction">📷 Scan &amp; upload your favourite moments</div>
-      <div class="qr-url" id="qr-url-display"></div>
-    </div>
-    <div class="qr-help">
-      <strong>Getting a real QR for your table tents:</strong><br>
-      Deploy this HTML file to Netlify, Vercel, or GitHub Pages (all free, ~5 mins). Paste the live URL here to regenerate the QR in coral to match your wedding theme.<br><br>
-      <label style="font-size:12px;color:#888;">Your deployed URL:</label>
-      <input type="text" id="custom-url" placeholder="https://cyril-and-megan.netlify.app" />
-      <button onclick="updateQR()">Generate QR Code</button>
-    </div>
+  <div class="qr-card">
+    <div class="qr-eyebrow">Scan to share photos</div>
+    <div class="qr-title">Cyril &amp; Megan</div>
+    <div class="qr-date">June 6, 2026</div>
+    <div id="qr-code"></div>
+    <div class="qr-sub">📷 Scan &amp; upload your favourite moments</div>
+    <div class="qr-url-display" id="qr-url-display"></div>
+  </div>
+  <div class="qr-help">
+    <strong>Update the QR for your table tents:</strong><br>
+    Once you've deployed this to GitHub Pages, paste your live URL below to regenerate the QR code.<br><br>
+    <label style="font-size:12px;color:#888;">Your GitHub Pages URL:</label>
+    <input type="text" id="custom-url" placeholder="https://yourusername.github.io/wedding-photo-wall/" />
+    <button onclick="updateQR()">Generate QR Code</button>
   </div>
 </div>
 
 <script>
-const MAX_PHOTOS = 10, STORAGE_KEY = 'cm_wedding_2026', INTERVAL = 8000;
-let pending = [], album = [], slideIdx = 0, playing = true, ssTimer = null, slideEls = [];
+// ══════════════════════════════════════════
+// CONFIG & STATE
+// ══════════════════════════════════════════
+const MAX = 10;
+const STORAGE_KEY = 'cm_wedding_2026';
+const IS_ADMIN = new URLSearchParams(window.location.search).has('admin');
 
-function saveAlbum() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(album)); } catch(e) {} }
-function loadAlbum() { try { const d = localStorage.getItem(STORAGE_KEY); album = d ? JSON.parse(d) : []; } catch(e) { album = []; } }
+let album = [];          // [{dataUrl, name, ts}]
+let slideIdx = 0;
+let playing = true;
+let ssTimer = null;
+let slideEls = [];
+let ssInterval = 8000;
 
+let guestSlots = new Array(MAX).fill(null);  // null | {dataUrl}
+let pendingGuestSlot = null;
+
+let adminSlots = new Array(MAX).fill(null);
+let pendingAdminSlot = null;
+
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+function saveAlbum() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(album)); } catch(e) {}
+}
+function loadAlbum() {
+  try { const d = localStorage.getItem(STORAGE_KEY); album = d ? JSON.parse(d) : []; }
+  catch(e) { album = []; }
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+function init() {
+  loadAlbum();
+  if (IS_ADMIN) {
+    document.getElementById('admin-nav').style.display = 'flex';
+    document.getElementById('view-guest').classList.remove('active');
+    document.getElementById('view-slideshow').classList.add('active');
+    document.querySelectorAll('.nav-btn')[0].classList.add('active');
+    buildSlotGrid('admin-slots', adminSlots, 'admin');
+    buildSlideshow();
+    updateNavCount();
+  } else {
+    buildSlotGrid('guest-slots', guestSlots, 'guest');
+  }
+}
+
+// ══════════════════════════════════════════
+// VIEW SWITCHER (admin only)
+// ══════════════════════════════════════════
 function switchView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach((b, i) => { if (['upload','slideshow','qr'][i] === name) b.classList.add('active'); });
+  const names = ['slideshow','my-upload','qr'];
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    if (names[i] === name) b.classList.add('active');
+  });
   if (name === 'slideshow') { loadAlbum(); buildSlideshow(); }
   if (name === 'qr') initQR();
 }
 
-function handleDrop(e) { e.preventDefault(); document.getElementById('drop-zone').classList.remove('drag-over'); handleFiles(e.dataTransfer.files); }
-function handleFiles(files) {
-  const space = MAX_PHOTOS - pending.length;
-  Array.from(files).slice(0, space).forEach(f => {
-    if (!f.type.startsWith('image/')) return;
-    const r = new FileReader(); r.onload = ev => { pending.push({ dataUrl: ev.target.result }); renderPreviews(); }; r.readAsDataURL(f);
+// ══════════════════════════════════════════
+// SLOT GRID (shared between guest & admin)
+// ══════════════════════════════════════════
+function buildSlotGrid(containerId, slotsArr, mode) {
+  const grid = document.getElementById(containerId);
+  grid.innerHTML = '';
+  slotsArr.forEach((slot, i) => {
+    const div = document.createElement('div');
+    div.className = 'slot' + (slot ? ' filled' : '');
+    div.id = `${mode}-slot-${i}`;
+    if (slot) {
+      div.innerHTML = `
+        <img src="${slot.dataUrl}" alt="photo ${i+1}" />
+        <div class="thumb-del"><span onclick="clearSlot('${mode}',${i})">✕</span></div>`;
+    } else {
+      div.innerHTML = `<span class="slot-num">${i+1}</span><span>tap to add</span>`;
+      div.onclick = () => openSlotPicker(mode, i);
+    }
+    grid.appendChild(div);
   });
+  updateQuota(mode);
 }
-function renderPreviews() {
-  const grid = document.getElementById('preview-grid'); grid.innerHTML = '';
-  pending.forEach((p, i) => { const div = document.createElement('div'); div.className = 'preview-item'; div.innerHTML = `<img src="${p.dataUrl}" alt="preview"><button class="remove-btn" onclick="removePending(${i})">✕</button>`; grid.appendChild(div); });
-  const pct = Math.round((pending.length / MAX_PHOTOS) * 100);
-  document.getElementById('quota-fill').style.width = pct + '%';
-  document.getElementById('quota-text').textContent = `${pending.length} / ${MAX_PHOTOS} photos selected`;
-  document.getElementById('quota-pct').textContent = pct + '%';
-  document.getElementById('submit-btn').disabled = pending.length === 0;
+
+function openSlotPicker(mode, idx) {
+  if (mode === 'guest') {
+    pendingGuestSlot = idx;
+    const inp = document.getElementById('guest-file-input');
+    inp.value = '';
+    inp.click();
+  } else {
+    pendingAdminSlot = idx;
+    const inp = document.getElementById('admin-file-input');
+    inp.value = '';
+    inp.click();
+  }
 }
-function removePending(i) { pending.splice(i, 1); renderPreviews(); }
-function submitPhotos() {
-  if (!pending.length) return; loadAlbum();
+
+function clearSlot(mode, idx) {
+  const arr = mode === 'guest' ? guestSlots : adminSlots;
+  arr[idx] = null;
+  buildSlotGrid(mode === 'guest' ? 'guest-slots' : 'admin-slots', arr, mode);
+}
+
+function updateQuota(mode) {
+  const arr = mode === 'guest' ? guestSlots : adminSlots;
+  const filled = arr.filter(Boolean).length;
+  const pct = Math.round((filled / MAX) * 100);
+  document.getElementById(`${mode}-quota-fill`).style.width = pct + '%';
+  document.getElementById(`${mode}-quota-text`).textContent = `${filled} of ${MAX} slots filled`;
+  document.getElementById(`${mode}-quota-pct`).textContent = pct + '%';
+  document.getElementById(`${mode}-submit`).disabled = filled === 0;
+}
+
+// ══════════════════════════════════════════
+// GUEST FILE HANDLING
+// ══════════════════════════════════════════
+function guestFileChosen(input) {
+  const file = input.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    guestSlots[pendingGuestSlot] = { dataUrl: ev.target.result };
+    buildSlotGrid('guest-slots', guestSlots, 'guest');
+  };
+  reader.readAsDataURL(file);
+}
+
+function guestSubmit() {
+  const filled = guestSlots.filter(Boolean);
+  if (!filled.length) return;
+  loadAlbum();
   const name = document.getElementById('guest-name').value.trim() || 'A guest';
   const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  pending.forEach(p => album.push({ dataUrl: p.dataUrl, name, ts })); saveAlbum();
-  pending = []; renderPreviews(); document.getElementById('guest-name').value = '';
-  const msg = document.getElementById('success-msg'); msg.classList.add('show'); setTimeout(() => msg.classList.remove('show'), 6000);
+  filled.forEach(s => album.push({ dataUrl: s.dataUrl, name, ts }));
+  saveAlbum();
+  // Show done screen
+  document.getElementById('guest-form').style.display = 'none';
+  document.getElementById('guest-done').style.display = 'block';
 }
 
+function resetGuestUpload() {
+  guestSlots = new Array(MAX).fill(null);
+  document.getElementById('guest-name').value = '';
+  document.getElementById('guest-form').style.display = 'block';
+  document.getElementById('guest-done').style.display = 'none';
+  buildSlotGrid('guest-slots', guestSlots, 'guest');
+}
+
+// ══════════════════════════════════════════
+// ADMIN FILE HANDLING
+// ══════════════════════════════════════════
+function adminFileChosen(input) {
+  const file = input.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    adminSlots[pendingAdminSlot] = { dataUrl: ev.target.result };
+    buildSlotGrid('admin-slots', adminSlots, 'admin');
+  };
+  reader.readAsDataURL(file);
+}
+
+function adminSubmit() {
+  const filled = adminSlots.filter(Boolean);
+  if (!filled.length) return;
+  loadAlbum();
+  const name = document.getElementById('admin-name').value.trim() || 'Cyril & Megan';
+  const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  filled.forEach(s => album.push({ dataUrl: s.dataUrl, name, ts }));
+  saveAlbum();
+  adminSlots = new Array(MAX).fill(null);
+  buildSlotGrid('admin-slots', adminSlots, 'admin');
+  showToast('admin-toast', `${filled.length} photo${filled.length > 1 ? 's' : ''} added to the slideshow ✓`, 'success');
+  updateNavCount();
+}
+
+// ══════════════════════════════════════════
+// SLIDESHOW
+// ══════════════════════════════════════════
 function buildSlideshow() {
-  const stage = document.getElementById('ss-stage'); slideEls.forEach(el => el.remove()); slideEls = [];
+  const stage = document.getElementById('ss-stage');
+  slideEls.forEach(el => el.remove()); slideEls = [];
   document.getElementById('ss-empty').style.display = album.length ? 'none' : 'flex';
   document.getElementById('ss-count').textContent = `${album.length} photo${album.length !== 1 ? 's' : ''}`;
+  updateNavCount();
+
   album.forEach((p, i) => {
-    const s = document.createElement('div'); s.className = 'slide' + (i === slideIdx ? ' active' : '');
-    s.innerHTML = `<img src="${p.dataUrl}" alt="Photo by ${p.name}"><div class="slide-caption">📸 ${p.name} · ${p.ts}</div>`;
-    stage.appendChild(s); slideEls.push(s);
+    const s = document.createElement('div');
+    s.className = 'slide' + (i === slideIdx ? ' active' : '');
+    s.innerHTML = `<img src="${p.dataUrl}" alt="Photo by ${p.name}" /><div class="slide-caption">📸 ${p.name} · ${p.ts}</div>`;
+    stage.appendChild(s);
+    slideEls.push(s);
   });
-  buildThumbs(); if (playing && album.length > 1) startTimer();
+
+  buildThumbs();
+  if (slideIdx >= album.length) slideIdx = 0;
+  if (playing && album.length > 1) startTimer();
 }
+
 function buildThumbs() {
-  const strip = document.getElementById('thumb-strip'); strip.innerHTML = '';
-  album.forEach((p, i) => { const d = document.createElement('div'); d.className = 'thumb' + (i === slideIdx ? ' active' : ''); d.innerHTML = `<img src="${p.dataUrl}" alt="thumb">`; d.onclick = () => goTo(i); strip.appendChild(d); });
+  const strip = document.getElementById('thumb-strip');
+  strip.innerHTML = '';
+  album.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'thumb' + (i === slideIdx ? ' active' : '');
+    d.innerHTML = `<img src="${p.dataUrl}" alt="thumb" /><div class="thumb-del"><span onclick="deletePhoto(${i}, event)">✕</span></div>`;
+    d.onclick = (e) => { if (!e.target.closest('.thumb-del span')) goTo(i); };
+    strip.appendChild(d);
+  });
 }
+
 function goTo(i) {
   if (!slideEls.length) return;
-  slideEls[slideIdx]?.classList.remove('active'); document.querySelectorAll('.thumb')[slideIdx]?.classList.remove('active');
+  slideEls[slideIdx]?.classList.remove('active');
+  document.querySelectorAll('.thumb')[slideIdx]?.classList.remove('active');
   slideIdx = ((i % album.length) + album.length) % album.length;
-  slideEls[slideIdx]?.classList.add('active'); document.querySelectorAll('.thumb')[slideIdx]?.classList.add('active');
+  slideEls[slideIdx]?.classList.add('active');
+  document.querySelectorAll('.thumb')[slideIdx]?.classList.add('active');
 }
-function step(dir) { goTo(slideIdx + dir); }
-function startTimer() { clearInterval(ssTimer); ssTimer = setInterval(() => { loadAlbum(); buildSlideshow(); step(1); }, INTERVAL); }
-function togglePlay() { playing = !playing; document.getElementById('play-btn').textContent = playing ? '⏸ Pause' : '▶ Play'; if (playing) startTimer(); else clearInterval(ssTimer); }
+
+function ssStep(dir) { goTo(slideIdx + dir); }
+
+function startTimer() {
+  clearInterval(ssTimer);
+  ssTimer = setInterval(() => {
+    loadAlbum(); buildSlideshow(); ssStep(1);
+  }, ssInterval);
+}
+
+function togglePlay() {
+  playing = !playing;
+  document.getElementById('play-btn').textContent = playing ? '⏸ Pause' : '▶ Play';
+  if (playing) startTimer(); else clearInterval(ssTimer);
+}
+
+function updateInterval(val) {
+  ssInterval = parseInt(val) * 1000;
+  document.getElementById('interval-val').textContent = val + 's';
+  if (playing) startTimer();
+}
+
 function refreshSlideshow() { loadAlbum(); buildSlideshow(); }
 
+function deletePhoto(idx, e) {
+  e.stopPropagation();
+  if (!confirm('Remove this photo from the album?')) return;
+  album.splice(idx, 1);
+  if (slideIdx >= album.length) slideIdx = Math.max(0, album.length - 1);
+  saveAlbum(); buildSlideshow();
+}
+
+function clearAlbum() {
+  if (!confirm(`Delete all ${album.length} photos from the album? This cannot be undone.`)) return;
+  album = []; slideIdx = 0; saveAlbum(); buildSlideshow();
+}
+
 async function downloadAll() {
-  loadAlbum(); if (!album.length) { alert('No photos yet!'); return; }
-  const zip = new JSZip(); const folder = zip.folder('Cyril-and-Megan-Wedding-6-6-26');
-  album.forEach((p, i) => { const b64 = p.dataUrl.split(',')[1]; const ext = p.dataUrl.startsWith('data:image/png') ? 'png' : 'jpg'; const safeName = p.name.replace(/[^a-z0-9_\-]/gi, '_').slice(0, 30); folder.file(`${String(i+1).padStart(3,'0')}_${safeName}.${ext}`, b64, { base64: true }); });
-  const blob = await zip.generateAsync({ type: 'blob' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Cyril-and-Megan-Wedding-Album.zip'; a.click();
+  loadAlbum();
+  if (!album.length) { alert('No photos yet!'); return; }
+  const zip = new JSZip();
+  const folder = zip.folder('Cyril-and-Megan-Wedding-6-6-26');
+  album.forEach((p, i) => {
+    const b64 = p.dataUrl.split(',')[1];
+    const ext = p.dataUrl.startsWith('data:image/png') ? 'png' : 'jpg';
+    const safeName = p.name.replace(/[^a-z0-9_\-]/gi, '_').slice(0, 30);
+    folder.file(`${String(i+1).padStart(3,'0')}_${safeName}.${ext}`, b64, { base64: true });
+  });
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Cyril-and-Megan-Wedding-Album.zip';
+  a.click();
 }
 
+// ══════════════════════════════════════════
+// QR CODE
+// ══════════════════════════════════════════
 function initQR() {
-  const url = window.location.href.split('#')[0]; document.getElementById('qr-url-display').textContent = url;
-  const inp = document.getElementById('custom-url'); if (!inp.value) inp.value = url.startsWith('file://') ? '' : url;
-  generateQR(url.startsWith('file://') ? 'https://cyril-and-megan.netlify.app' : url);
+  const url = window.location.href.split('?')[0].split('#')[0];
+  document.getElementById('qr-url-display').textContent = url;
+  const inp = document.getElementById('custom-url');
+  if (!inp.value) inp.value = url.startsWith('file://') ? '' : url;
+  generateQR(url.startsWith('file://') ? 'https://yourusername.github.io/wedding-photo-wall/' : url);
 }
-function generateQR(url) { const c = document.getElementById('qr-code'); c.innerHTML = ''; new QRCode(c, { text: url, width: 200, height: 200, colorDark: '#D85A30', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H }); }
-function updateQR() { const url = document.getElementById('custom-url').value.trim(); if (!url) return; document.getElementById('qr-url-display').textContent = url; generateQR(url); }
 
-loadAlbum();
+function generateQR(url) {
+  const c = document.getElementById('qr-code');
+  c.innerHTML = '';
+  new QRCode(c, { text: url, width: 200, height: 200, colorDark: '#D85A30', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+}
+
+function updateQR() {
+  const url = document.getElementById('custom-url').value.trim();
+  if (!url) return;
+  document.getElementById('qr-url-display').textContent = url;
+  generateQR(url);
+}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function showToast(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+function updateNavCount() {
+  document.getElementById('nav-count').textContent = album.length;
+}
+
+// ── GO ──
+init();
 </script>
 </body>
 </html>
