@@ -15,109 +15,109 @@
   --text: #1a1a18; --text-muted: #5F5E5A; --text-hint: #9a9890;
   --bg: #faf9f6; --surface: #fff;
   --border: rgba(0,0,0,0.12); --border-md: rgba(0,0,0,0.2);
-  --gray-lt: #F1EFE8;
-  --radius: 10px; --radius-lg: 16px;
+  --gray-lt: #F1EFE8; --radius: 10px; --radius-lg: 16px;
 }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-/* ── HEADER ── */
 .site-header { text-align: center; padding: 2rem 1rem 1.25rem; border-bottom: 0.5px solid var(--border); background: var(--surface); }
 .eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--coral); margin-bottom: 6px; }
 .site-header h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 600; }
 .date-line { font-size: 14px; color: var(--text-muted); margin-top: 5px; }
-
-/* ── NAV (admin only) ── */
-.nav { display: flex; justify-content: center; gap: 8px; padding: 0.75rem 1rem; background: var(--surface); border-bottom: 0.5px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.nav { display: flex; justify-content: center; gap: 8px; padding: 0.75rem 1rem; background: var(--surface); border-bottom: 0.5px solid var(--border); position: sticky; top: 0; z-index: 10; flex-wrap: wrap; }
 .nav-btn { padding: 7px 18px; border-radius: 99px; border: 0.5px solid var(--border); background: transparent; cursor: pointer; font-size: 14px; color: var(--text-muted); transition: all 0.15s; white-space: nowrap; }
 .nav-btn.active { background: var(--coral); color: #fff; border-color: var(--coral); font-weight: 500; }
 .nav-badge { display: inline-block; background: var(--coral-lt); color: var(--coral-dk); font-size: 11px; font-weight: 600; border-radius: 99px; padding: 1px 7px; margin-left: 5px; }
 .nav-btn.active .nav-badge { background: rgba(255,255,255,0.25); color: #fff; }
-
-/* ── VIEWS ── */
 .view { display: none; max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
 .view.active { display: block; }
-
-/* ── SHARED FORM BITS ── */
 .field-label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
 .text-input { width: 100%; padding: 11px 14px; border-radius: var(--radius); border: 0.5px solid var(--border); font-size: 15px; background: var(--surface); color: var(--text); outline: none; margin-bottom: 1rem; transition: border-color 0.15s; }
 .text-input:focus { border-color: var(--coral); }
-
-/* ── SLOT GRID ── */
 .slot-intro { font-size: 15px; color: var(--text-muted); text-align: center; margin-bottom: 1.25rem; }
 .slots-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 1rem; }
-.slot {
-  aspect-ratio: 1; border-radius: var(--radius); border: 1.5px dashed var(--border-md);
-  background: var(--gray-lt); cursor: pointer; position: relative;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  overflow: hidden; transition: border-color 0.15s, background 0.15s;
-  font-size: 11px; color: var(--text-hint); gap: 4px;
-}
+.slot { aspect-ratio: 1; border-radius: var(--radius); border: 1.5px dashed var(--border-md); background: var(--gray-lt); cursor: pointer; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; transition: border-color 0.15s, background 0.15s; font-size: 11px; color: var(--text-hint); gap: 4px; }
 .slot:hover { border-color: var(--coral); background: var(--coral-lt); }
 .slot.filled { border-style: solid; border-color: transparent; cursor: default; }
 .slot.filled:hover { border-color: transparent; background: transparent; }
 .slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .slot .slot-num { font-size: 16px; font-weight: 600; color: var(--text-hint); }
-.slot-remove {
-  position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
-  border-radius: 50%; border: none; background: rgba(0,0,0,0.5);
-  color: #fff; cursor: pointer; font-size: 12px; line-height: 20px;
-  text-align: center; padding: 0; display: none;
-}
-.slot.filled:hover .slot-remove { display: block; }
-
+.thumb-del { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.slot.filled:hover .thumb-del { background: rgba(163,45,45,0.6); }
+.thumb-del span { color: #fff; font-size: 18px; opacity: 0; transition: opacity 0.15s; cursor: pointer; }
+.slot.filled:hover .thumb-del span { opacity: 1; }
 .quota-bar-wrap { margin-bottom: 1.25rem; }
 .quota-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
 .quota-track { height: 5px; background: #e8e6e0; border-radius: 99px; }
 .quota-fill { height: 100%; border-radius: 99px; background: var(--coral); transition: width 0.3s; }
-
 .submit-btn { width: 100%; padding: 14px; border-radius: var(--radius); border: none; background: var(--coral); color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
 .submit-btn:disabled { opacity: 0.38; cursor: not-allowed; }
 .submit-btn:hover:not(:disabled) { opacity: 0.87; }
-
 .toast { display: none; border-radius: var(--radius); padding: 13px 16px; font-size: 14px; text-align: center; margin-bottom: 1rem; }
 .toast.success { background: var(--green-lt); border: 0.5px solid var(--green-bd); color: var(--green); }
 .toast.error { background: var(--red-lt); border: 0.5px solid var(--red-bd); color: var(--red); }
 .toast.show { display: block; }
-
-/* ── ADMIN: SLIDESHOW ── */
 .ss-toolbar { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; flex-wrap: wrap; }
 .ctrl-btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid var(--border); background: var(--surface); cursor: pointer; font-size: 14px; color: var(--text); transition: background 0.15s; white-space: nowrap; }
 .ctrl-btn:hover { background: var(--gray-lt); }
 .ctrl-btn.danger { color: var(--red); }
 .ctrl-btn.danger:hover { background: var(--red-lt); }
 .ss-count { margin-left: auto; font-size: 13px; color: var(--text-muted); }
-
+.interval-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 0.75rem; }
+.interval-row input[type=range] { flex: 1; accent-color: var(--coral); }
+.interval-val { min-width: 32px; font-weight: 500; color: var(--text); }
+.transition-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 0.75rem; flex-wrap: wrap; }
+.transition-opts { display: flex; gap: 6px; }
+.trans-btn { padding: 5px 12px; border-radius: 99px; border: 0.5px solid var(--border); background: var(--surface); cursor: pointer; font-size: 13px; color: var(--text-muted); transition: all 0.15s; }
+.trans-btn.active { background: var(--coral); color: #fff; border-color: var(--coral); }
 .ss-stage { width: 100%; aspect-ratio: 16/9; background: #111; border-radius: var(--radius-lg); overflow: hidden; position: relative; margin-bottom: 10px; }
-.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.7s ease; }
-.slide.active { opacity: 1; }
-.slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
-.slide-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.62)); color: #fff; padding: 22px 14px 10px; font-size: 13px; }
+.slide, .fs-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.7s ease; display: flex; align-items: center; justify-content: center; }
+.slide.active, .fs-slide.active { opacity: 1; }
+.slide img, .fs-slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.slide-caption, .fs-caption { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.62)); color: #fff; padding: 22px 14px 10px; font-size: 13px; }
+body.transition-slide .slide         { transform: translateX(100%); opacity: 1; transition: transform 0.55s ease; }
+body.transition-slide .slide.active  { transform: translateX(0); }
+body.transition-slide .fs-slide         { transform: translateX(100%); opacity: 1; transition: transform 0.55s ease; }
+body.transition-slide .fs-slide.active  { transform: translateX(0); }
+body.transition-zoom .slide          { opacity: 0; transform: scale(1.06); transition: opacity 0.6s ease, transform 0.6s ease; }
+body.transition-zoom .slide.active   { opacity: 1; transform: scale(1); }
+body.transition-zoom .fs-slide          { opacity: 0; transform: scale(1.06); transition: opacity 0.6s ease, transform 0.6s ease; }
+body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
 .ss-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; gap: 10px; }
 .ss-empty-icon { font-size: 48px; }
 .ss-empty p { font-size: 14px; }
-
 .thumb-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 1rem; }
 .thumb-strip::-webkit-scrollbar { height: 4px; }
 .thumb-strip::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
 .thumb { flex-shrink: 0; width: 56px; height: 56px; border-radius: var(--radius); overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: border-color 0.15s; position: relative; }
 .thumb.active { border-color: var(--coral); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.thumb-del { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.thumb .thumb-del { background: rgba(0,0,0,0); }
 .thumb:hover .thumb-del { background: rgba(163,45,45,0.65); }
-.thumb-del span { color: #fff; font-size: 18px; opacity: 0; transition: opacity 0.15s; cursor: pointer; }
 .thumb:hover .thumb-del span { opacity: 1; }
-
-.interval-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); margin-bottom: 0.75rem; }
-.interval-row input[type=range] { flex: 1; }
-.interval-val { min-width: 32px; font-weight: 500; color: var(--text); }
-
 .dl-btn { width: 100%; padding: 11px; border-radius: var(--radius); border: 0.5px solid var(--border); background: var(--surface); font-size: 14px; color: var(--text); cursor: pointer; transition: background 0.15s; margin-top: 0.5rem; }
 .dl-btn:hover { background: var(--gray-lt); }
-
-/* ── ADMIN: MY UPLOADS ── */
+.dl-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+#fs-overlay { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; }
+#fs-overlay.active { display: flex; }
+#fs-stage { flex: 1; position: relative; overflow: hidden; }
+.fs-caption { font-size: 15px; padding: 28px 20px 14px; }
+.fs-bar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: rgba(0,0,0,0.85); flex-wrap: wrap; }
+.fs-btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid rgba(255,255,255,0.2); background: transparent; color: #fff; cursor: pointer; font-size: 14px; transition: background 0.15s; white-space: nowrap; }
+.fs-btn:hover { background: rgba(255,255,255,0.12); }
+.fs-btn.danger { color: #f99; }
+.fs-btn.danger:hover { background: rgba(163,45,45,0.4); }
+.fs-count { font-size: 13px; color: rgba(255,255,255,0.55); }
+.fs-spacer { flex: 1; }
 .section-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
-
-/* ── ADMIN: QR ── */
+.manage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+.manage-thumb { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; background: var(--gray-lt); }
+.manage-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.manage-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: flex-end; padding: 6px; transition: background 0.15s; }
+.manage-thumb:hover .manage-overlay { background: rgba(0,0,0,0.45); }
+.manage-del { display: none; padding: 4px 10px; border-radius: 99px; border: none; background: rgba(163,45,45,0.9); color: #fff; font-size: 12px; cursor: pointer; width: 100%; text-align: center; }
+.manage-thumb:hover .manage-del { display: block; }
+.manage-meta { font-size: 11px; color: rgba(255,255,255,0.85); line-height: 1.3; margin-bottom: 4px; width: 100%; display: none; }
+.manage-thumb:hover .manage-meta { display: block; }
+.manage-empty { font-size: 14px; color: var(--text-muted); text-align: center; padding: 2rem 0; }
 .qr-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem 1.5rem; text-align: center; max-width: 300px; margin: 0 auto 1.5rem; }
 .qr-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
 .qr-title { font-size: 20px; font-weight: 600; margin-bottom: 3px; }
@@ -131,8 +131,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
 .qr-help input { width: 100%; padding: 9px 12px; border-radius: 8px; border: 0.5px solid #ccc; font-size: 13px; margin: 8px 0; background: var(--surface); color: var(--text); }
 .qr-help button { width: 100%; padding: 9px; border-radius: 8px; border: 0.5px solid #ccc; background: var(--surface); cursor: pointer; font-size: 13px; }
 .qr-help button:hover { background: var(--gray-lt); }
-
-/* ── GUEST DONE STATE ── */
 .done-screen { text-align: center; padding: 3rem 1.5rem; }
 .done-screen .done-icon { font-size: 64px; margin-bottom: 1rem; }
 .done-screen h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
@@ -149,116 +147,108 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
   <div class="date-line">June 6, 2026 &nbsp;·&nbsp; Share your memories with us 💐</div>
 </header>
 
-<!-- Admin nav (hidden for guests) -->
 <nav class="nav" id="admin-nav" style="display:none">
   <button class="nav-btn active" onclick="switchView('slideshow')">🎞 Slideshow <span class="nav-badge" id="nav-count">0</span></button>
+  <button class="nav-btn" onclick="switchView('manage')">🗂 Manage</button>
   <button class="nav-btn" onclick="switchView('my-upload')">📷 My Upload</button>
   <button class="nav-btn" onclick="switchView('qr')">📲 QR Code</button>
 </nav>
 
-<!-- ══════════════════════════════════════════
-     GUEST VIEW
-══════════════════════════════════════════ -->
-<div class="view active" id="view-guest">
+<div id="fs-overlay">
+  <div id="fs-stage"></div>
+  <div class="fs-bar">
+    <button class="fs-btn" id="fs-play-btn" onclick="fsTogglePlay()">⏸ Pause</button>
+    <button class="fs-btn" onclick="fsStep(-1)">◀</button>
+    <button class="fs-btn" onclick="fsStep(1)">▶</button>
+    <span class="fs-count" id="fs-count"></span>
+    <span class="fs-spacer"></span>
+    <button class="fs-btn danger" onclick="fsDeleteCurrent()">🗑 Delete</button>
+    <button class="fs-btn" onclick="exitFullscreen()">✕ Exit</button>
+  </div>
+</div>
 
-  <!-- Done state (shown after submit) -->
+<!-- GUEST VIEW -->
+<div class="view active" id="view-guest">
   <div class="done-screen" id="guest-done" style="display:none">
     <div class="done-icon">💐</div>
     <h2>Thank you!</h2>
     <p>Your photos have been added to the album.<br>Enjoy the celebration!</p>
     <button class="upload-more-btn" onclick="resetGuestUpload()">Upload more photos</button>
   </div>
-
-  <!-- Upload form -->
   <div id="guest-form">
     <p class="slot-intro">Tap any empty slot to add a photo — up to 10 from you 📸</p>
-
-    <div class="toast success" id="guest-toast"></div>
-
+    <div class="toast" id="guest-toast"></div>
     <label class="field-label" for="guest-name">Your name (optional)</label>
     <input class="text-input" id="guest-name" type="text" placeholder="e.g. Aunt Marie" maxlength="40" />
-
     <div class="slots-grid" id="guest-slots"></div>
-
     <div class="quota-bar-wrap">
-      <div class="quota-row">
-        <span id="guest-quota-text">0 of 10 slots filled</span>
-        <span id="guest-quota-pct">0%</span>
-      </div>
+      <div class="quota-row"><span id="guest-quota-text">0 of 10 slots filled</span><span id="guest-quota-pct">0%</span></div>
       <div class="quota-track"><div class="quota-fill" id="guest-quota-fill" style="width:0%"></div></div>
     </div>
-
-    <button class="submit-btn" id="guest-submit" disabled onclick="guestSubmit()">
-      Add my photos to the album ✨
-    </button>
+    <button class="submit-btn" id="guest-submit" disabled onclick="guestSubmit()">Add my photos to the album ✨</button>
   </div>
-
-  <!-- Hidden file input -->
   <input type="file" id="guest-file-input" accept="image/*" style="display:none" onchange="guestFileChosen(this)" />
 </div>
 
-<!-- ══════════════════════════════════════════
-     ADMIN: SLIDESHOW
-══════════════════════════════════════════ -->
+<!-- ADMIN: SLIDESHOW -->
 <div class="view" id="view-slideshow">
   <div class="ss-toolbar">
     <button class="ctrl-btn" id="play-btn" onclick="togglePlay()">⏸ Pause</button>
     <button class="ctrl-btn" onclick="ssStep(-1)">◀</button>
     <button class="ctrl-btn" onclick="ssStep(1)">▶</button>
     <button class="ctrl-btn" onclick="refreshSlideshow()">↻ Refresh</button>
-    <button class="ctrl-btn danger" onclick="clearAlbum()">🗑 Clear all</button>
+    <button class="ctrl-btn" onclick="enterFullscreen()">⛶ Fullscreen</button>
     <span class="ss-count" id="ss-count">0 photos</span>
   </div>
-
   <div class="interval-row">
-    <span>Slide speed:</span>
+    <span>Speed:</span>
     <input type="range" min="3" max="20" step="1" value="8" id="interval-slider" oninput="updateInterval(this.value)" />
     <span class="interval-val" id="interval-val">8s</span>
   </div>
-
+  <div class="transition-row">
+    <span>Transition:</span>
+    <div class="transition-opts">
+      <button class="trans-btn active" onclick="setTransition('fade',this)">Fade</button>
+      <button class="trans-btn" onclick="setTransition('slide',this)">Slide</button>
+      <button class="trans-btn" onclick="setTransition('zoom',this)">Zoom</button>
+    </div>
+  </div>
   <div class="ss-stage" id="ss-stage">
     <div class="ss-empty" id="ss-empty">
       <div class="ss-empty-icon">📸</div>
       <p>No photos yet — waiting for guests…</p>
     </div>
   </div>
-
   <div class="thumb-strip" id="thumb-strip"></div>
-
-  <button class="dl-btn" onclick="downloadAll()">⬇ Save all photos as ZIP</button>
+  <button class="dl-btn" onclick="downloadAll(event)">⬇ Save all photos as ZIP</button>
 </div>
 
-<!-- ══════════════════════════════════════════
-     ADMIN: MY UPLOAD
-══════════════════════════════════════════ -->
+<!-- ADMIN: MANAGE -->
+<div class="view" id="view-manage">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+    <p class="section-title" style="margin:0">All photos in the album</p>
+    <button class="ctrl-btn danger" onclick="clearAlbum()" style="font-size:13px;padding:6px 12px;">🗑 Delete all</button>
+  </div>
+  <div class="manage-grid" id="manage-grid"></div>
+  <button class="dl-btn" onclick="downloadAll(event)">⬇ Save all photos as ZIP</button>
+</div>
+
+<!-- ADMIN: MY UPLOAD -->
 <div class="view" id="view-my-upload">
   <p class="section-title">Add your own photos to the album</p>
-
   <div class="toast" id="admin-toast"></div>
-
   <label class="field-label" for="admin-name">Label for your photos</label>
   <input class="text-input" id="admin-name" type="text" value="Cyril & Megan" maxlength="40" />
-
   <div class="slots-grid" id="admin-slots"></div>
-
   <div class="quota-bar-wrap">
-    <div class="quota-row">
-      <span id="admin-quota-text">0 of 10 slots filled</span>
-      <span id="admin-quota-pct">0%</span>
-    </div>
+    <div class="quota-row"><span id="admin-quota-text">0 of 10 slots filled</span><span id="admin-quota-pct">0%</span></div>
     <div class="quota-track"><div class="quota-fill" id="admin-quota-fill" style="width:0%"></div></div>
   </div>
-
-  <button class="submit-btn" id="admin-submit" disabled onclick="adminSubmit()">
-    Add to slideshow ✨
-  </button>
-
+  <button class="submit-btn" id="admin-submit" disabled onclick="adminSubmit()">Add to slideshow ✨</button>
   <input type="file" id="admin-file-input" accept="image/*" style="display:none" onchange="adminFileChosen(this)" />
 </div>
 
-<!-- ══════════════════════════════════════════
-     ADMIN: QR CODE
-══════════════════════════════════════════ -->
+<!-- ADMIN: QR -->
 <div class="view" id="view-qr">
   <div class="qr-card">
     <div class="qr-eyebrow">Scan to share photos</div>
@@ -270,95 +260,154 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; b
   </div>
   <div class="qr-help">
     <strong>Update the QR for your table tents:</strong><br>
-    Once you've deployed this to GitHub Pages, paste your live URL below to regenerate the QR code.<br><br>
+    Paste your GitHub Pages URL below to regenerate the QR code.<br><br>
     <label style="font-size:12px;color:#888;">Your GitHub Pages URL:</label>
     <input type="text" id="custom-url" placeholder="https://yourusername.github.io/wedding-photo-wall/" />
     <button onclick="updateQR()">Generate QR Code</button>
   </div>
 </div>
 
-<script>
-// ══════════════════════════════════════════
-// CONFIG & STATE
-// ══════════════════════════════════════════
+<script type="module">
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, writeBatch }
+                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
+                            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBxsog9yqdESKWTCN4RRkZZFFHk-uSAjVQ",
+  authDomain: "wedding-photo-wall-3ef08.firebaseapp.com",
+  projectId: "wedding-photo-wall-3ef08",
+  storageBucket: "wedding-photo-wall-3ef08.firebasestorage.app",
+  messagingSenderId: "91455428107",
+  appId: "1:91455428107:web:07f7305f9bde0d8b83d90e"
+};
+
+const fbApp   = initializeApp(firebaseConfig);
+const db      = getFirestore(fbApp);
+const storage = getStorage(fbApp);
+
+// ── STATE ──
 const MAX = 10;
-const STORAGE_KEY = 'cm_wedding_2026';
 const IS_ADMIN = new URLSearchParams(window.location.search).has('admin');
+let album = [];
+let slideIdx = 0, playing = true, ssTimer = null, slideEls = [], ssInterval = 8000;
+let fsIdx = 0, fsPlaying = true, fsTimer = null, fsSlideEls = [];
+let guestSlots = new Array(MAX).fill(null), pendingGuestSlot = null;
+let adminSlots = new Array(MAX).fill(null), pendingAdminSlot = null;
 
-let album = [];          // [{dataUrl, name, ts}]
-let slideIdx = 0;
-let playing = true;
-let ssTimer = null;
-let slideEls = [];
-let ssInterval = 8000;
-
-let guestSlots = new Array(MAX).fill(null);  // null | {dataUrl}
-let pendingGuestSlot = null;
-
-let adminSlots = new Array(MAX).fill(null);
-let pendingAdminSlot = null;
-
-// ══════════════════════════════════════════
-// STORAGE
-// ══════════════════════════════════════════
-function saveAlbum() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(album)); } catch(e) {}
-}
-function loadAlbum() {
-  try { const d = localStorage.getItem(STORAGE_KEY); album = d ? JSON.parse(d) : []; }
-  catch(e) { album = []; }
+// ── REAL-TIME LISTENER ──
+function startListener() {
+  const q = query(collection(db, 'photos'), orderBy('uploadedAt', 'asc'));
+  onSnapshot(q, snap => {
+    album = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (IS_ADMIN) { buildSlideshow(); buildManageGrid(); updateNavCount(); }
+  }, err => { console.error(err); showToast('guest-toast', 'Connection error — check Firebase setup.', 'error'); });
 }
 
-// ══════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════
+// ── UPLOAD ──
+async function uploadPhotos(slots, name) {
+  const filled = slots.filter(Boolean);
+  if (!filled.length) return;
+  const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const base = Date.now();
+  await Promise.all(filled.map(async (slot, i) => {
+    const compressed = await compressImage(slot.dataUrl, 1400, 0.82);
+    const blob = dataUrlToBlob(compressed);
+    const ext = blob.type === 'image/png' ? 'png' : 'jpg';
+    const path = `photos/${base}_${i}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const sRef = ref(storage, path);
+    await uploadBytes(sRef, blob);
+    const url = await getDownloadURL(sRef);
+    await addDoc(collection(db, 'photos'), { url, storagePath: path, name, ts, uploadedAt: base + i });
+  }));
+}
+
+async function deletePhotoById(id, storagePath, skipConfirm) {
+  if (!skipConfirm && !confirm('Remove this photo from the album?')) return;
+  await deleteDoc(doc(db, 'photos', id));
+  if (storagePath) deleteObject(ref(storage, storagePath)).catch(() => {});
+}
+
+async function clearAlbum() {
+  if (!album.length) return;
+  if (!confirm(`Delete all ${album.length} photos? This cannot be undone.`)) return;
+  const batch = writeBatch(db);
+  album.forEach(p => batch.delete(doc(db, 'photos', p.id)));
+  await batch.commit();
+  album.forEach(p => { if (p.storagePath) deleteObject(ref(storage, p.storagePath)).catch(() => {}); });
+}
+window.clearAlbum = clearAlbum;
+
+// ── IMAGE HELPERS ──
+function compressImage(dataUrl, maxDim, quality) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      let { width: w, height: h } = img;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else       { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      res(c.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  });
+}
+function dataUrlToBlob(dataUrl) {
+  const [hdr, data] = dataUrl.split(',');
+  const mime = hdr.match(/:(.*?);/)[1];
+  const bin = atob(data); const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
+// ── INIT ──
 function init() {
-  loadAlbum();
   if (IS_ADMIN) {
     document.getElementById('admin-nav').style.display = 'flex';
     document.getElementById('view-guest').classList.remove('active');
     document.getElementById('view-slideshow').classList.add('active');
     document.querySelectorAll('.nav-btn')[0].classList.add('active');
     buildSlotGrid('admin-slots', adminSlots, 'admin');
-    buildSlideshow();
-    updateNavCount();
   } else {
     buildSlotGrid('guest-slots', guestSlots, 'guest');
   }
+  startListener();
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') exitFullscreen();
+    if (e.key === 'ArrowRight') { ssStep(1); fsStep(1); }
+    if (e.key === 'ArrowLeft')  { ssStep(-1); fsStep(-1); }
+  });
 }
 
-// ══════════════════════════════════════════
-// VIEW SWITCHER (admin only)
-// ══════════════════════════════════════════
+// ── VIEWS ──
 function switchView(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
-  const names = ['slideshow','my-upload','qr'];
-  document.querySelectorAll('.nav-btn').forEach((b, i) => {
-    if (names[i] === name) b.classList.add('active');
+  ['slideshow','manage','my-upload','qr'].forEach((n, i) => {
+    if (n === name) document.querySelectorAll('.nav-btn')[i].classList.add('active');
   });
-  if (name === 'slideshow') { loadAlbum(); buildSlideshow(); }
+  if (name === 'manage') buildManageGrid();
   if (name === 'qr') initQR();
 }
+window.switchView = switchView;
 
-// ══════════════════════════════════════════
-// SLOT GRID (shared between guest & admin)
-// ══════════════════════════════════════════
+// ── SLOT GRID ──
 function buildSlotGrid(containerId, slotsArr, mode) {
-  const grid = document.getElementById(containerId);
-  grid.innerHTML = '';
+  const grid = document.getElementById(containerId); grid.innerHTML = '';
   slotsArr.forEach((slot, i) => {
     const div = document.createElement('div');
     div.className = 'slot' + (slot ? ' filled' : '');
-    div.id = `${mode}-slot-${i}`;
     if (slot) {
-      div.innerHTML = `
-        <img src="${slot.dataUrl}" alt="photo ${i+1}" />
-        <div class="thumb-del"><span onclick="clearSlot('${mode}',${i})">✕</span></div>`;
+      div.innerHTML = `<img src="${slot.dataUrl}" alt="" /><div class="thumb-del"><span>✕</span></div>`;
+      div.querySelector('.thumb-del span').addEventListener('click', e => { e.stopPropagation(); clearSlot(mode, i); });
     } else {
       div.innerHTML = `<span class="slot-num">${i+1}</span><span>tap to add</span>`;
-      div.onclick = () => openSlotPicker(mode, i);
+      div.addEventListener('click', () => openSlotPicker(mode, i));
     }
     grid.appendChild(div);
   });
@@ -366,17 +415,8 @@ function buildSlotGrid(containerId, slotsArr, mode) {
 }
 
 function openSlotPicker(mode, idx) {
-  if (mode === 'guest') {
-    pendingGuestSlot = idx;
-    const inp = document.getElementById('guest-file-input');
-    inp.value = '';
-    inp.click();
-  } else {
-    pendingAdminSlot = idx;
-    const inp = document.getElementById('admin-file-input');
-    inp.value = '';
-    inp.click();
-  }
+  if (mode === 'guest') { pendingGuestSlot = idx; const inp = document.getElementById('guest-file-input'); inp.value=''; inp.click(); }
+  else { pendingAdminSlot = idx; const inp = document.getElementById('admin-file-input'); inp.value=''; inp.click(); }
 }
 
 function clearSlot(mode, idx) {
@@ -395,100 +435,87 @@ function updateQuota(mode) {
   document.getElementById(`${mode}-submit`).disabled = filled === 0;
 }
 
-// ══════════════════════════════════════════
-// GUEST FILE HANDLING
-// ══════════════════════════════════════════
+// ── GUEST ──
 function guestFileChosen(input) {
-  const file = input.files[0];
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    guestSlots[pendingGuestSlot] = { dataUrl: ev.target.result };
-    buildSlotGrid('guest-slots', guestSlots, 'guest');
-  };
-  reader.readAsDataURL(file);
+  const f = input.files[0]; if (!f || !f.type.startsWith('image/')) return;
+  const r = new FileReader(); r.onload = ev => { guestSlots[pendingGuestSlot] = { dataUrl: ev.target.result }; buildSlotGrid('guest-slots', guestSlots, 'guest'); }; r.readAsDataURL(f);
 }
+window.guestFileChosen = guestFileChosen;
 
-function guestSubmit() {
-  const filled = guestSlots.filter(Boolean);
-  if (!filled.length) return;
-  loadAlbum();
+async function guestSubmit() {
+  const btn = document.getElementById('guest-submit');
+  btn.disabled = true; btn.textContent = 'Uploading…';
   const name = document.getElementById('guest-name').value.trim() || 'A guest';
-  const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  filled.forEach(s => album.push({ dataUrl: s.dataUrl, name, ts }));
-  saveAlbum();
-  // Show done screen
-  document.getElementById('guest-form').style.display = 'none';
-  document.getElementById('guest-done').style.display = 'block';
+  try {
+    await uploadPhotos(guestSlots, name);
+    guestSlots = new Array(MAX).fill(null);
+    document.getElementById('guest-form').style.display = 'none';
+    document.getElementById('guest-done').style.display = 'block';
+  } catch(e) { console.error(e); btn.disabled=false; btn.textContent='Add my photos to the album ✨'; showToast('guest-toast','Upload failed — please try again.','error'); }
 }
+window.guestSubmit = guestSubmit;
 
 function resetGuestUpload() {
   guestSlots = new Array(MAX).fill(null);
   document.getElementById('guest-name').value = '';
   document.getElementById('guest-form').style.display = 'block';
   document.getElementById('guest-done').style.display = 'none';
+  document.getElementById('guest-submit').textContent = 'Add my photos to the album ✨';
   buildSlotGrid('guest-slots', guestSlots, 'guest');
 }
+window.resetGuestUpload = resetGuestUpload;
 
-// ══════════════════════════════════════════
-// ADMIN FILE HANDLING
-// ══════════════════════════════════════════
+// ── ADMIN UPLOAD ──
 function adminFileChosen(input) {
-  const file = input.files[0];
-  if (!file || !file.type.startsWith('image/')) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    adminSlots[pendingAdminSlot] = { dataUrl: ev.target.result };
-    buildSlotGrid('admin-slots', adminSlots, 'admin');
-  };
-  reader.readAsDataURL(file);
+  const f = input.files[0]; if (!f || !f.type.startsWith('image/')) return;
+  const r = new FileReader(); r.onload = ev => { adminSlots[pendingAdminSlot] = { dataUrl: ev.target.result }; buildSlotGrid('admin-slots', adminSlots, 'admin'); }; r.readAsDataURL(f);
 }
+window.adminFileChosen = adminFileChosen;
 
-function adminSubmit() {
-  const filled = adminSlots.filter(Boolean);
-  if (!filled.length) return;
-  loadAlbum();
+async function adminSubmit() {
+  const filled = adminSlots.filter(Boolean); if (!filled.length) return;
+  const btn = document.getElementById('admin-submit'); btn.disabled=true; btn.textContent='Uploading…';
   const name = document.getElementById('admin-name').value.trim() || 'Cyril & Megan';
-  const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  filled.forEach(s => album.push({ dataUrl: s.dataUrl, name, ts }));
-  saveAlbum();
-  adminSlots = new Array(MAX).fill(null);
-  buildSlotGrid('admin-slots', adminSlots, 'admin');
-  showToast('admin-toast', `${filled.length} photo${filled.length > 1 ? 's' : ''} added to the slideshow ✓`, 'success');
-  updateNavCount();
+  try {
+    await uploadPhotos(adminSlots, name);
+    adminSlots = new Array(MAX).fill(null); buildSlotGrid('admin-slots', adminSlots, 'admin');
+    showToast('admin-toast', `${filled.length} photo${filled.length>1?'s':''} added ✓`, 'success'); updateNavCount();
+  } catch(e) { console.error(e); showToast('admin-toast','Upload failed.','error'); }
+  finally { btn.disabled=false; btn.textContent='Add to slideshow ✨'; }
 }
+window.adminSubmit = adminSubmit;
 
-// ══════════════════════════════════════════
-// SLIDESHOW
-// ══════════════════════════════════════════
+// ── TRANSITION ──
+function setTransition(name, btn) {
+  document.body.className = document.body.className.replace(/transition-\S+/g,'').trim();
+  if (name !== 'fade') document.body.classList.add('transition-' + name);
+  document.querySelectorAll('.trans-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+window.setTransition = setTransition;
+
+// ── SLIDESHOW ──
 function buildSlideshow() {
   const stage = document.getElementById('ss-stage');
   slideEls.forEach(el => el.remove()); slideEls = [];
   document.getElementById('ss-empty').style.display = album.length ? 'none' : 'flex';
-  document.getElementById('ss-count').textContent = `${album.length} photo${album.length !== 1 ? 's' : ''}`;
-  updateNavCount();
-
+  document.getElementById('ss-count').textContent = `${album.length} photo${album.length!==1?'s':''}`;
+  if (slideIdx >= album.length) slideIdx = Math.max(0, album.length - 1);
   album.forEach((p, i) => {
-    const s = document.createElement('div');
-    s.className = 'slide' + (i === slideIdx ? ' active' : '');
-    s.innerHTML = `<img src="${p.dataUrl}" alt="Photo by ${p.name}" /><div class="slide-caption">📸 ${p.name} · ${p.ts}</div>`;
-    stage.appendChild(s);
-    slideEls.push(s);
+    const s = document.createElement('div'); s.className = 'slide' + (i===slideIdx?' active':'');
+    s.innerHTML = `<img src="${p.url}" alt="" loading="lazy"><div class="slide-caption">📸 ${p.name} · ${p.ts}</div>`;
+    stage.appendChild(s); slideEls.push(s);
   });
-
-  buildThumbs();
-  if (slideIdx >= album.length) slideIdx = 0;
-  if (playing && album.length > 1) startTimer();
+  buildThumbs(); if (playing && album.length > 1) startTimer();
 }
 
 function buildThumbs() {
-  const strip = document.getElementById('thumb-strip');
-  strip.innerHTML = '';
+  const strip = document.getElementById('thumb-strip'); strip.innerHTML = '';
   album.forEach((p, i) => {
-    const d = document.createElement('div');
-    d.className = 'thumb' + (i === slideIdx ? ' active' : '');
-    d.innerHTML = `<img src="${p.dataUrl}" alt="thumb" /><div class="thumb-del"><span onclick="deletePhoto(${i}, event)">✕</span></div>`;
-    d.onclick = (e) => { if (!e.target.closest('.thumb-del span')) goTo(i); };
+    const d = document.createElement('div'); d.className='thumb'+(i===slideIdx?' active':'');
+    d.innerHTML = `<img src="${p.url}" alt="" loading="lazy"><div class="thumb-del"><span>✕</span></div>`;
+    d.querySelector('.thumb-del span').addEventListener('click', e => { e.stopPropagation(); deletePhotoById(p.id, p.storagePath); });
+    d.addEventListener('click', e => { if (!e.target.closest('.thumb-del')) goTo(i); });
     strip.appendChild(d);
   });
 }
@@ -496,105 +523,148 @@ function buildThumbs() {
 function goTo(i) {
   if (!slideEls.length) return;
   slideEls[slideIdx]?.classList.remove('active');
-  document.querySelectorAll('.thumb')[slideIdx]?.classList.remove('active');
+  document.querySelectorAll('#thumb-strip .thumb')[slideIdx]?.classList.remove('active');
   slideIdx = ((i % album.length) + album.length) % album.length;
   slideEls[slideIdx]?.classList.add('active');
-  document.querySelectorAll('.thumb')[slideIdx]?.classList.add('active');
+  document.querySelectorAll('#thumb-strip .thumb')[slideIdx]?.classList.add('active');
 }
 
-function ssStep(dir) { goTo(slideIdx + dir); }
+function ssStep(dir) { if (slideEls.length) goTo(slideIdx + dir); }
+window.ssStep = ssStep;
 
-function startTimer() {
-  clearInterval(ssTimer);
-  ssTimer = setInterval(() => {
-    loadAlbum(); buildSlideshow(); ssStep(1);
-  }, ssInterval);
-}
+function startTimer() { clearInterval(ssTimer); ssTimer = setInterval(() => goTo(slideIdx + 1), ssInterval); }
 
 function togglePlay() {
   playing = !playing;
   document.getElementById('play-btn').textContent = playing ? '⏸ Pause' : '▶ Play';
   if (playing) startTimer(); else clearInterval(ssTimer);
 }
+window.togglePlay = togglePlay;
 
 function updateInterval(val) {
   ssInterval = parseInt(val) * 1000;
   document.getElementById('interval-val').textContent = val + 's';
-  if (playing) startTimer();
+  if (playing) startTimer(); if (fsPlaying) startFsTimer();
 }
+window.updateInterval = updateInterval;
 
-function refreshSlideshow() { loadAlbum(); buildSlideshow(); }
+function refreshSlideshow() { buildSlideshow(); }
+window.refreshSlideshow = refreshSlideshow;
 
-function deletePhoto(idx, e) {
-  e.stopPropagation();
-  if (!confirm('Remove this photo from the album?')) return;
-  album.splice(idx, 1);
-  if (slideIdx >= album.length) slideIdx = Math.max(0, album.length - 1);
-  saveAlbum(); buildSlideshow();
-}
-
-function clearAlbum() {
-  if (!confirm(`Delete all ${album.length} photos from the album? This cannot be undone.`)) return;
-  album = []; slideIdx = 0; saveAlbum(); buildSlideshow();
-}
-
-async function downloadAll() {
-  loadAlbum();
-  if (!album.length) { alert('No photos yet!'); return; }
-  const zip = new JSZip();
-  const folder = zip.folder('Cyril-and-Megan-Wedding-6-6-26');
-  album.forEach((p, i) => {
-    const b64 = p.dataUrl.split(',')[1];
-    const ext = p.dataUrl.startsWith('data:image/png') ? 'png' : 'jpg';
-    const safeName = p.name.replace(/[^a-z0-9_\-]/gi, '_').slice(0, 30);
-    folder.file(`${String(i+1).padStart(3,'0')}_${safeName}.${ext}`, b64, { base64: true });
+// ── MANAGE ──
+function buildManageGrid() {
+  const grid = document.getElementById('manage-grid'); if (!grid) return;
+  grid.innerHTML = '';
+  if (!album.length) { grid.innerHTML = '<p class="manage-empty">No photos in the album yet.</p>'; return; }
+  album.forEach(p => {
+    const d = document.createElement('div'); d.className = 'manage-thumb';
+    d.innerHTML = `<img src="${p.url}" alt="" loading="lazy"><div class="manage-overlay"><div style="width:100%"><div class="manage-meta">${p.name} · ${p.ts}</div><button class="manage-del">Delete</button></div></div>`;
+    d.querySelector('.manage-del').addEventListener('click', () => deletePhotoById(p.id, p.storagePath));
+    grid.appendChild(d);
   });
-  const blob = await zip.generateAsync({ type: 'blob' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'Cyril-and-Megan-Wedding-Album.zip';
-  a.click();
 }
 
-// ══════════════════════════════════════════
-// QR CODE
-// ══════════════════════════════════════════
+// ── DOWNLOAD ──
+async function downloadAll(e) {
+  if (!album.length) { alert('No photos yet!'); return; }
+  const btn = e.target; btn.textContent = 'Preparing ZIP…'; btn.disabled = true;
+  try {
+    const zip = new JSZip(); const folder = zip.folder('Cyril-and-Megan-Wedding-6-6-26');
+    await Promise.all(album.map(async (p, i) => {
+      const res = await fetch(p.url); const blob = await res.blob();
+      const ext = blob.type === 'image/png' ? 'png' : 'jpg';
+      const safe = p.name.replace(/[^a-z0-9_\-]/gi,'_').slice(0,30);
+      folder.file(`${String(i+1).padStart(3,'0')}_${safe}.${ext}`, blob);
+    }));
+    const zblob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(zblob);
+    a.download = 'Cyril-and-Megan-Wedding-Album.zip'; a.click();
+  } catch(err) { alert('Download failed — try again.'); console.error(err); }
+  finally { btn.textContent = '⬇ Save all photos as ZIP'; btn.disabled = false; }
+}
+window.downloadAll = downloadAll;
+
+// ── FULLSCREEN ──
+function enterFullscreen() {
+  if (!album.length) return;
+  fsIdx = slideIdx; fsPlaying = playing;
+  buildFsSlides();
+  const ov = document.getElementById('fs-overlay'); ov.classList.add('active');
+  if (ov.requestFullscreen) ov.requestFullscreen().catch(() => {});
+  if (fsPlaying) startFsTimer();
+}
+window.enterFullscreen = enterFullscreen;
+
+function exitFullscreen() {
+  document.getElementById('fs-overlay').classList.remove('active');
+  clearInterval(fsTimer);
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  slideIdx = fsIdx; buildSlideshow(); goTo(slideIdx);
+}
+window.exitFullscreen = exitFullscreen;
+
+function buildFsSlides() {
+  const stage = document.getElementById('fs-stage'); fsSlideEls.forEach(el => el.remove()); fsSlideEls = [];
+  album.forEach((p, i) => {
+    const s = document.createElement('div'); s.className = 'fs-slide' + (i===fsIdx?' active':'');
+    s.innerHTML = `<img src="${p.url}" alt="" loading="lazy"><div class="fs-caption">📸 ${p.name} · ${p.ts}</div>`;
+    stage.appendChild(s); fsSlideEls.push(s);
+  });
+  updateFsCount();
+}
+
+function fsGoTo(i) {
+  if (!fsSlideEls.length) return;
+  fsSlideEls[fsIdx]?.classList.remove('active');
+  fsIdx = ((i % album.length) + album.length) % album.length;
+  fsSlideEls[fsIdx]?.classList.add('active'); updateFsCount();
+}
+
+function fsStep(dir) { if (fsSlideEls.length) fsGoTo(fsIdx + dir); }
+window.fsStep = fsStep;
+
+function updateFsCount() { document.getElementById('fs-count').textContent = album.length ? `${fsIdx+1} / ${album.length}` : ''; }
+function startFsTimer() { clearInterval(fsTimer); fsTimer = setInterval(() => fsGoTo(fsIdx + 1), ssInterval); }
+
+function fsTogglePlay() {
+  fsPlaying = !fsPlaying;
+  document.getElementById('fs-play-btn').textContent = fsPlaying ? '⏸ Pause' : '▶ Play';
+  if (fsPlaying) startFsTimer(); else clearInterval(fsTimer);
+}
+window.fsTogglePlay = fsTogglePlay;
+
+async function fsDeleteCurrent() {
+  if (!album.length) return;
+  const p = album[fsIdx];
+  if (!confirm('Delete this photo?')) return;
+  await deletePhotoById(p.id, p.storagePath, true);
+  if (!album.length) { exitFullscreen(); return; }
+  if (fsIdx >= album.length) fsIdx = Math.max(0, album.length - 1);
+  buildFsSlides();
+}
+window.fsDeleteCurrent = fsDeleteCurrent;
+
+// ── QR ──
 function initQR() {
-  const url = window.location.href.split('?')[0].split('#')[0];
+  const url = window.location.href.split('?')[0];
   document.getElementById('qr-url-display').textContent = url;
-  const inp = document.getElementById('custom-url');
-  if (!inp.value) inp.value = url.startsWith('file://') ? '' : url;
+  const inp = document.getElementById('custom-url'); if (!inp.value) inp.value = url.startsWith('file://') ? '' : url;
   generateQR(url.startsWith('file://') ? 'https://yourusername.github.io/wedding-photo-wall/' : url);
 }
-
 function generateQR(url) {
-  const c = document.getElementById('qr-code');
-  c.innerHTML = '';
-  new QRCode(c, { text: url, width: 200, height: 200, colorDark: '#D85A30', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+  const c = document.getElementById('qr-code'); c.innerHTML = '';
+  new QRCode(c, { text: url, width: 200, height: 200, colorDark: '#D85A30', colorLight: '#fff', correctLevel: QRCode.CorrectLevel.H });
 }
+function updateQR() { const url = document.getElementById('custom-url').value.trim(); if (!url) return; document.getElementById('qr-url-display').textContent = url; generateQR(url); }
+window.updateQR = updateQR;
 
-function updateQR() {
-  const url = document.getElementById('custom-url').value.trim();
-  if (!url) return;
-  document.getElementById('qr-url-display').textContent = url;
-  generateQR(url);
-}
-
-// ══════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════
+// ── HELPERS ──
 function showToast(id, msg, type) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.className = `toast ${type} show`;
-  setTimeout(() => el.classList.remove('show'), 5000);
+  const el = document.getElementById(id); el.textContent = msg;
+  el.className = `toast ${type} show`; setTimeout(() => el.classList.remove('show'), 5000);
 }
+function updateNavCount() { const el = document.getElementById('nav-count'); if (el) el.textContent = album.length; }
 
-function updateNavCount() {
-  document.getElementById('nav-count').textContent = album.length;
-}
-
-// ── GO ──
 init();
 </script>
 </body>
