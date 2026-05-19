@@ -96,11 +96,18 @@ body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
 .dl-btn { width: 100%; padding: 11px; border-radius: var(--radius); border: 0.5px solid var(--border); background: var(--surface); font-size: 14px; color: var(--text); cursor: pointer; transition: background 0.15s; margin-top: 0.5rem; }
 .dl-btn:hover { background: var(--gray-lt); }
 .dl-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-#fs-overlay { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; }
+#fs-overlay { display: none; position: fixed; inset: 0; background: #000; z-index: 1000; flex-direction: column; cursor: none; }
 #fs-overlay.active { display: flex; }
+#fs-overlay.controls-visible { cursor: default; }
 #fs-stage { flex: 1; position: relative; overflow: hidden; }
 .fs-caption { font-size: 15px; padding: 28px 20px 14px; }
-.fs-bar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: rgba(0,0,0,0.85); flex-wrap: wrap; }
+/* bar slides up/down based on controls-visible */
+.fs-bar {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  background: rgba(0,0,0,0.85); flex-wrap: wrap;
+  transform: translateY(100%); transition: transform 0.25s ease;
+}
+#fs-overlay.controls-visible .fs-bar { transform: translateY(0); }
 .fs-btn { padding: 7px 14px; border-radius: var(--radius); border: 0.5px solid rgba(255,255,255,0.2); background: transparent; color: #fff; cursor: pointer; font-size: 14px; transition: background 0.15s; white-space: nowrap; }
 .fs-btn:hover { background: rgba(255,255,255,0.12); }
 .fs-btn.danger { color: #f99; }
@@ -108,11 +115,19 @@ body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
 .fs-count { font-size: 13px; color: rgba(255,255,255,0.55); }
 .fs-spacer { flex: 1; }
 .section-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; }
-.manage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-bottom: 1rem; }
+/* scrollable viewer wrapping the manage grid */
+.manage-viewer {
+  max-height: 420px; overflow-y: auto;
+  border: 0.5px solid var(--border); border-radius: var(--radius-lg);
+  padding: 10px; margin-bottom: 1rem; background: var(--surface);
+}
+.manage-viewer::-webkit-scrollbar { width: 5px; }
+.manage-viewer::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+.manage-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
 .manage-thumb { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; background: var(--gray-lt); }
 .manage-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .manage-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: flex-end; padding: 6px; transition: background 0.15s; }
-.manage-thumb:hover .manage-overlay { background: rgba(0,0,0,0.45); }
+.manage-thumb:hover .manage-overlay { background: rgba(0,0,0,0.5); }
 .manage-del { display: none; padding: 4px 10px; border-radius: 99px; border: none; background: rgba(163,45,45,0.9); color: #fff; font-size: 12px; cursor: pointer; width: 100%; text-align: center; }
 .manage-thumb:hover .manage-del { display: block; }
 .manage-meta { font-size: 11px; color: rgba(255,255,255,0.85); line-height: 1.3; margin-bottom: 4px; width: 100%; display: none; }
@@ -229,7 +244,9 @@ body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
     <p class="section-title" style="margin:0">All photos in the album</p>
     <button class="ctrl-btn danger" onclick="clearAlbum()" style="font-size:13px;padding:6px 12px;">🗑 Delete all</button>
   </div>
-  <div class="manage-grid" id="manage-grid"></div>
+  <div class="manage-viewer">
+    <div class="manage-grid" id="manage-grid"></div>
+  </div>
   <button class="dl-btn" onclick="downloadAll(event)">⬇ Save all photos as ZIP</button>
 </div>
 
@@ -301,8 +318,19 @@ function startListener() {
   const q = query(collection(db, 'photos'), orderBy('uploadedAt', 'asc'));
   onSnapshot(q, snap => {
     album = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (IS_ADMIN) { buildSlideshow(); buildManageGrid(); updateNavCount(); }
-  }, err => { console.error(err); showToast('guest-toast', 'Connection error — check Firebase setup.', 'error'); });
+    if (IS_ADMIN) {
+      buildSlideshow();
+      buildManageGrid();
+      updateNavCount();
+      // if fullscreen is open, rebuild fs slides to pick up new/deleted photos
+      if (document.getElementById('fs-overlay').classList.contains('active')) {
+        const prevIdx = fsIdx;
+        buildFsSlides();
+        fsIdx = Math.min(prevIdx, Math.max(0, album.length - 1));
+        fsGoTo(fsIdx);
+      }
+    }
+  }, err => { console.error(err); });
 }
 
 // ── UPLOAD ──
@@ -325,8 +353,13 @@ async function uploadPhotos(slots, name) {
 
 async function deletePhotoById(id, storagePath, skipConfirm) {
   if (!skipConfirm && !confirm('Remove this photo from the album?')) return;
-  await deleteDoc(doc(db, 'photos', id));
-  if (storagePath) deleteObject(ref(storage, storagePath)).catch(() => {});
+  try {
+    await deleteDoc(doc(db, 'photos', id));
+    if (storagePath) deleteObject(ref(storage, storagePath)).catch(() => {});
+  } catch(e) {
+    console.error('Delete failed:', e);
+    alert('Delete failed — make sure your Firestore rules allow delete:\n\nallow delete: if true;');
+  }
 }
 
 async function clearAlbum() {
@@ -585,26 +618,66 @@ async function downloadAll(e) {
 window.downloadAll = downloadAll;
 
 // ── FULLSCREEN ──
+let fsIdleTimer = null;
+
+function showFsControls() {
+  const ov = document.getElementById('fs-overlay');
+  ov.classList.add('controls-visible');
+  clearTimeout(fsIdleTimer);
+  fsIdleTimer = setTimeout(() => ov.classList.remove('controls-visible'), 3000);
+}
+
 function enterFullscreen() {
   if (!album.length) return;
   fsIdx = slideIdx; fsPlaying = playing;
+  const ov = document.getElementById('fs-overlay');
+  ov.classList.add('active');
   buildFsSlides();
-  const ov = document.getElementById('fs-overlay'); ov.classList.add('active');
+  // request native browser fullscreen
   if (ov.requestFullscreen) ov.requestFullscreen().catch(() => {});
+  showFsControls();
   if (fsPlaying) startFsTimer();
+  // mouse move shows controls
+  ov.addEventListener('mousemove', showFsControls);
 }
 window.enterFullscreen = enterFullscreen;
 
 function exitFullscreen() {
-  document.getElementById('fs-overlay').classList.remove('active');
+  const ov = document.getElementById('fs-overlay');
+  ov.classList.remove('active', 'controls-visible');
   clearInterval(fsTimer);
-  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
-  slideIdx = fsIdx; buildSlideshow(); goTo(slideIdx);
+  clearTimeout(fsIdleTimer);
+  ov.removeEventListener('mousemove', showFsControls);
+  // exit browser native fullscreen only if it's actually active
+  if (document.fullscreenElement) {
+    document.exitFullscreen().catch(() => {});
+  }
+  slideIdx = fsIdx;
+  buildSlideshow();
+  goTo(slideIdx);
 }
 window.exitFullscreen = exitFullscreen;
 
+// when user presses ESC, browser exits native fullscreen and fires this event
+// we use it to also close our overlay cleanly
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    const ov = document.getElementById('fs-overlay');
+    if (ov.classList.contains('active')) {
+      ov.classList.remove('active', 'controls-visible');
+      clearInterval(fsTimer);
+      clearTimeout(fsIdleTimer);
+      ov.removeEventListener('mousemove', showFsControls);
+      slideIdx = fsIdx;
+      buildSlideshow();
+      goTo(slideIdx);
+    }
+  }
+});
+
 function buildFsSlides() {
-  const stage = document.getElementById('fs-stage'); fsSlideEls.forEach(el => el.remove()); fsSlideEls = [];
+  const stage = document.getElementById('fs-stage');
+  fsSlideEls.forEach(el => el.remove()); fsSlideEls = [];
   album.forEach((p, i) => {
     const s = document.createElement('div'); s.className = 'fs-slide' + (i===fsIdx?' active':'');
     s.innerHTML = `<img src="${p.url}" alt="" loading="lazy"><div class="fs-caption">📸 ${p.name} · ${p.ts}</div>`;
@@ -638,9 +711,7 @@ async function fsDeleteCurrent() {
   const p = album[fsIdx];
   if (!confirm('Delete this photo?')) return;
   await deletePhotoById(p.id, p.storagePath, true);
-  if (!album.length) { exitFullscreen(); return; }
-  if (fsIdx >= album.length) fsIdx = Math.max(0, album.length - 1);
-  buildFsSlides();
+  // listener will rebuild fs slides automatically via onSnapshot
 }
 window.fsDeleteCurrent = fsDeleteCurrent;
 
