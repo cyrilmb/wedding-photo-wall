@@ -157,9 +157,9 @@ body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
 <body>
 
 <header class="site-header">
-  <div class="eyebrow">Wedding Photo Album</div>
+  <div class="eyebrow">Wedding Photo Wall</div>
   <h1>Cyril &amp; Megan</h1>
-  <div class="date-line">June 6, 2026 &nbsp;·&nbsp; Share your memories with us 💐</div>
+  <div class="date-line">06.06.2026 &nbsp;·&nbsp; Share some moments with the crowd 💐</div>
 </header>
 
 <nav class="nav" id="admin-nav" style="display:none">
@@ -187,14 +187,14 @@ body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
   <div class="done-screen" id="guest-done" style="display:none">
     <div class="done-icon">💐</div>
     <h2>Thank you!</h2>
-    <p>Your photos have been added to the album.<br>Enjoy the celebration!</p>
+    <p>Your photos have been added to the wall.<br>Now go hit the dance floor!</p>
     <button class="upload-more-btn" onclick="resetGuestUpload()">Upload more photos</button>
   </div>
   <div id="guest-form">
-    <p class="slot-intro">Tap any empty slot to add a photo — up to 10 from you 📸</p>
+    <p class="slot-intro">Tap any empty slot to add a photo — up to 10 at a time 📸</p>
     <div class="toast" id="guest-toast"></div>
     <label class="field-label" for="guest-name">Your name (optional)</label>
-    <input class="text-input" id="guest-name" type="text" placeholder="e.g. Aunt Marie" maxlength="40" />
+    <input class="text-input" id="guest-name" type="text" placeholder="e.g. xoxo Gossip Girl" maxlength="40" />
     <div class="slots-grid" id="guest-slots"></div>
     <div class="quota-bar-wrap">
       <div class="quota-row"><span id="guest-quota-text">0 of 10 slots filled</span><span id="guest-quota-pct">0%</span></div>
@@ -268,11 +268,11 @@ body.transition-zoom .fs-slide.active   { opacity: 1; transform: scale(1); }
 <!-- ADMIN: QR -->
 <div class="view" id="view-qr">
   <div class="qr-card">
-    <div class="qr-eyebrow">Scan to share photos</div>
+    <div class="qr-eyebrow">Scan to upload your photos to the wall!</div>
     <div class="qr-title">Cyril &amp; Megan</div>
     <div class="qr-date">June 6, 2026</div>
     <div id="qr-code"></div>
-    <div class="qr-sub">📷 Scan &amp; upload your favourite moments</div>
+    <div class="qr-sub">📷 Scan &amp; share your favorite moments</div>
     <div class="qr-url-display" id="qr-url-display"></div>
   </div>
   <div class="qr-help">
